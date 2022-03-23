@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+ 
+    <title>Document</title>
+</head>
+ 
+<!-- Vamos a implementar la lucha de pokemons. Vamos a crear un marcador, con la vida de Pikachu y de Bulbasur. Vamos a crear un botón para que cada vez que hagamos clic en un botón "Luchar"; pikachu atacará a bulbasur, y viceversa. Hay que actualizar la vida de ambos pokemons en función del daño recibido.-->
+ 
+<!-- Requisito: Voy a guardar las veces que el usuario hace click en el botón
+Para ello utilizaremos localStorage -->
+ 
+<!-- Requisito: ME gustaría que si he iniciado una lucha de pokemons, guardar la vida de ambos pokemons en el localStorage. Cuando vuelva a abrir la app; quiero ver la vida actualizada de los pokemons en su marcador, y NO la vida inicial de 500 y 600 respectivamente. Corregir: 12:45 -->
+ 
+<!-- Pensad: Como inicializamos los pokemons en función de si hay datos en el localStorage? Que propiedades de localStorage voy a crear para guardar la vida de cada uno de los pokemons? Cuando es que hay que actualizar la vida de los pokemons en el localStorage -->
+ 
+ 
+ 
+<body>
+    <h1>Lucha de Pokemons!</h1>
+    <div class="container">
+        <p id="pokemon1">Vida de Squirtle <span>0</span></p>
+        <p id="pokemon2">Vida de Bulbasur <span>0</span></p>
+        <button>Luchar!</button>
+        <p id="contador">Los pokemon han luchado <span>0</span> veces</p>
+    </div>
+ 
+ 
+    <script>
+        class Pokemon {
+            constructor(id, nombre, tipos, vida, ataque, defensa) {
+                this.id = id
+                this.nombre = nombre
+                this.tipos = tipos
+                this.vida = vida
+                this.ataque = ataque
+                this.defensa = defensa
+            }
+ 
+            atacar(pokemon) {
+                // restar al pokemon atacado el número de puntos de vida entre su 0 y su ataque 
+                let puntosAtaque = Math.floor(Math.random() * (this.ataque));
+                pokemon.vida = pokemon.vida - puntosAtaque;
+            }
+        }
+ 
+        let bulbasaur;
+        let squirtle;
+ 
+        if (localStorage.vidapokemon1) {
+ 
+            console.log(typeof (localStorage.vidapokemon1));
+ 
+            bulbasaur = new Pokemon(1, "Bulbasaur", ['Grass', 'Poison'], localStorage.vidapokemon2, 49, 49);
+            squirtle = new Pokemon(1, "Squirtle", ['Water'], localStorage.vidapokemon1, 48, 65);
+ 
+        }
+ 
+        else {
+            bulbasaur = new Pokemon(1, "Bulbasaur", ['Grass', 'Poison'], 500, 49, 49);
+            squirtle = new Pokemon(1, "Squirtle", ['Water'], 600, 48, 65);
+        }
+        // vamos a poner la vida inicial de nuestros pokemons en sus respectivos marcadores
+        actualizarMarcador(squirtle.vida, bulbasaur.vida);
+ 
+        //Mirar si en localStorage hay una propiedad clics. Si la hay, poner su valor en el contador de clics. En caso contrario, ya le podemos dejar el 0.
+        if (localStorage.clics) {
+            document.querySelector("#contador span").textContent = localStorage.clics;
+        }
+ 
+ 
+        // Asociadme un evento "click" al botón, de manera que cada vez que haga click en el botón, bulbasaur ataca a squirtle, y viceversa. Después de ambos ataques, tenéis que actualizar la vida de ambos pokémons en sus marcadores.
+ 
+        document.querySelector("button").addEventListener("click", function () {
+ 
+            // voy a guardar en el localStorage todas las veces que hacemos click
+ 
+            // Si exsite una propiedad en localStorage que se llama clics, significa que previamente ya habíamos crado esta propiedad. Simplemente tenemos que incrementar en 1 el número de clics
+ 
+            if (localStorage.clics) {
+                localStorage.clics++;
+            }
+ 
+            // es la primera vez que entramos en esta aplicación. Vamos a establecer una propiedad nueva de nombre "clics" a valor 1
+            else {
+                localStorage.clics = 1;
+            }
+ 
+            document.querySelector("#contador span").textContent = localStorage.clics;
+ 
+            bulbasaur.atacar(squirtle);
+            squirtle.atacar(bulbasaur);
+            actualizarMarcador(squirtle.vida, bulbasaur.vida);
+ 
+            // Debemos guardar en el localStorage la vida de los Pokémons cada vez que esta se actualiza
+            localStorage.vidapokemon1 = squirtle.vida;
+            localStorage.vidapokemon2 = bulbasaur.vida;
+ 
+ 
+        });
+ 
+        function actualizarMarcador(vida1, vida2) {
+            document.querySelector("#pokemon1 span").textContent = vida1;
+            document.querySelector("#pokemon2 span").textContent = vida2;
+        }
+ 
+    </script>
+</body>
+ 
+</html>

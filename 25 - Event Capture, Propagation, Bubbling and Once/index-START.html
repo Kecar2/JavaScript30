@@ -3,6 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>Understanding JavaScript's Capture</title>
+  <style>
+    html {
+      box-sizing: border-box;
+    }
+    
+    *, *:before, *:after { 
+      box-sizing: inherit; 
+    }
+  
+    div {
+      width: 100%;
+      padding: 100px;
+    }
+  
+    .one {
+      background: thistle;
+    }
+  
+    .two {
+      background: mistyrose;
+    }
+  
+    .three {
+      background: coral;
+    }
+  </style>
 </head>
 <body class="bod">
 
@@ -13,36 +39,17 @@
     </div>
   </div>
 
-<style>
-  html {
-    box-sizing: border-box;
-  }
-  
-  *, *:before, *:after { 
-    box-sizing: inherit; 
-  }
-
-  div {
-    width: 100%;
-    padding: 100px;
-  }
-
-  .one {
-    background: thistle;
-  }
-
-  .two {
-    background: mistyrose;
-  }
-
-  .three {
-    background: coral;
-  }
-</style>
-
 <button></button>
 <script>
-
+    // Asociadme un evento click a cada uno de los DIVs.
+    // LA función de callback, debe ejecutar un console.log y mostrar por el terminal el valor de event.target.classList
+  document.querySelectorAll("div").forEach(div => {
+    div.addEventListener("click", function(e) {
+      console.log(e.currentTarget.classList.value);
+    })
+  })
 </script>
+
+
 </body>
 </html>
